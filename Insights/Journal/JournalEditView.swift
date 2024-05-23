@@ -8,32 +8,46 @@
 import SwiftUI
 
 struct JournalEditView: View {
-    @State private var timestamp = Date()
-    @State private var content = ""
+    @Environment(\.presentationMode) var presentationMode
     @State private var showingDateSheet = false
-    private var action: (Journal) -> Void
+    @State private var selectedButton: ButtonType? = nil
     
-    init(_ action: @escaping (Journal) -> Void) {
+    @State private var journal: Journal
+    private(set) var action: (Journal) -> Void
+    
+    init(_ journal: Journal? = nil, action: @escaping (Journal) -> Void) {
+        self.journal = journal ?? Journal.initial()
         self.action = action
+    }
+    
+    enum ButtonType: String, CaseIterable {
+        case prompt = "fireworks"
+        case photo = "photo"
+        case location = "location"
     }
     
     var body: some View {
         NavigationStack {
-            VStack {
-                TextEditor(text: $content)
-                    .frame(height: .infinity)
+            VStack(spacing: 0) {
+                GeometryReader { geometry in
+                    TextEditor(text: $journal.content)
+                    .frame(height: geometry.size.height)
+                    .onTapGesture {
+                        selectedButton = nil
+                    }
+                }
+                .padding()
             }
-            .padding()
-            .navigationTitle(timestamp.formatted(date: .numeric, time: .omitted))
+            .navigationTitle(journal.date.formatted(date: .numeric, time: .omitted))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarTitleMenu {
                     Section {
                         Button(action: {
-                            
+                            journal.date = journal.timestamp
                         }, label: {
                             Text("Journal Date")
-                            Text(timestamp.formatted(date: .complete, time: .omitted))
+                            Text(journal.timestamp.formatted(date: .complete, time: .omitted))
                         })
                         
                         Button(action: {
@@ -48,38 +62,35 @@ struct JournalEditView: View {
                     }, label: {
                         Label("Delete", systemImage: "trash")
                     })
-                    .background(.red)
                 }
                 
                 ToolbarItem {
                     Button(action: {
-                        action(Journal(timestamp: timestamp, content: content))
+                        action(journal)
+                        presentationMode.wrappedValue.dismiss()
                     }, label: {
                         Text("Done")
                     })
                 }
                 
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Spacer()
-                    Button(action: {
-                        
-                    }, label: {
-                        Image(systemName: "fireworks")
-                    })
-                    
-                    Spacer()
-                    Button(action: {
-                        
-                    }, label: {
-                        Image(systemName: "photo.on.rectangle")
-                    })
-                    
-                    Spacer()
-                    Button(action: {
-                        
-                    }, label: {
-                        Image(systemName: "location")
-                    })
+                    ForEach(ButtonType.allCases, id: \.rawValue) { bt in
+                        Spacer()
+                        Button(action: {
+                            selectedButton = bt
+                        }, label: {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 11, style: .continuous)
+                                    .foregroundColor(.gray.opacity(0.3))
+                                    .foregroundStyle(.tint)
+                                    .shadow(radius: 3)
+                                    .opacity(selectedButton == bt ? 1 : 0)
+
+                                Image(systemName: bt.rawValue)
+                                    .foregroundStyle(.blue)
+                            }
+                        })
+                    }
                     Spacer()
                 }
             }
@@ -88,7 +99,7 @@ struct JournalEditView: View {
             .presentationBackground(.regularMaterial)
         }
         .sheet(isPresented: $showingDateSheet) {
-            DatePickerView(date: $timestamp, showingDateSheet: $showingDateSheet)
+            DatePickerView(date: $journal.date, showingDateSheet: $showingDateSheet)
         }
     }
 }
@@ -119,7 +130,7 @@ struct DatePickerView: View {
 }
 
 #Preview {
-    JournalEditView { journal in
-        print(journal)
+    JournalEditView { item in
+        print(item)
     }
 }

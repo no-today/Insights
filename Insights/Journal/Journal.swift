@@ -10,11 +10,19 @@ import SwiftData
 
 @Model
 final class Journal {
-    var timestamp: Date
+    var timestamp: Date = Date.now
+    var date: Date
+    var title: String
     var content: String
     
-    init(timestamp: Date, content: String) {
-        self.timestamp = timestamp
+    init(date: Date, title: String, content: String) {
+        self.date = date
+        self.title = title
         self.content = content
+    }
+    
+    static func initial() -> Journal {
+        let date = Date()
+        return Journal(date: date, title: date.formatted(date: .complete, time: .omitted), content: "")
     }
 }

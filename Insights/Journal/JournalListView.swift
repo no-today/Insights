@@ -12,6 +12,8 @@ struct JournalListView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Journal]
     
+    @State private var showingEditSheet = false
+    
     var body: some View {
         NavigationStack {
             List {
@@ -25,18 +27,15 @@ struct JournalListView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
+                    NavigationLink(destination: JournalEditView(action: { item in modelContext.insert(item) })) {
+                        Button(action: {
+                            showingEditSheet = true
+                        }) {
+                            Label("Add Item", systemImage: "plus")
+                        }
                     }
                 }
             }
-        }
-    }
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = Journal(timestamp: Date(), content: "")
-            modelContext.insert(newItem)
         }
     }
 }
