@@ -8,16 +8,18 @@
 import SwiftUI
 
 struct JournalEditView: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @State private var showingDateSheet = false
     @State private var selectedButton: ButtonType? = nil
     
     @State private var journal: Journal
-    private(set) var action: (Journal) -> Void
+    private(set) var save: (Journal) -> Void
+    private(set) var delete: (Journal) -> Void
     
-    init(_ journal: Journal? = nil, action: @escaping (Journal) -> Void) {
+    init(_ journal: Journal? = nil, _ save: @escaping (Journal) -> Void, _ delete: @escaping (Journal) -> Void) {
         self.journal = journal ?? Journal.initial()
-        self.action = action
+        self.save = save
+        self.delete = delete
     }
     
     enum ButtonType: String, CaseIterable {
@@ -58,7 +60,8 @@ struct JournalEditView: View {
                     }
                     
                     Button(role: .destructive, action: {
-                        
+                        delete(journal)
+                        dismiss()
                     }, label: {
                         Label("Delete", systemImage: "trash")
                     })
@@ -66,8 +69,8 @@ struct JournalEditView: View {
                 
                 ToolbarItem {
                     Button(action: {
-                        action(journal)
-                        presentationMode.wrappedValue.dismiss()
+                        save(journal)
+                        dismiss()
                     }, label: {
                         Text("Done")
                     })
@@ -130,7 +133,5 @@ struct DatePickerView: View {
 }
 
 #Preview {
-    JournalEditView { item in
-        print(item)
-    }
+    JournalEditView(nil, { _ in}, { _ in})
 }

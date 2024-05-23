@@ -12,6 +12,7 @@ import SwiftData
 ///
 struct HabitListView: View {
     @Environment(\.modelContext) private var modelContext
+    @State private var showingEditSheet = false
     
     @State private var searchText = ""
     @State private var sort: SortDescriptor<Habit> = .init(\.name, order: .forward)
@@ -40,11 +41,13 @@ struct HabitListView: View {
         NavigationStack {
             SectionedQueryView(for: Habit.self, groupBy: \.rating, filter: filter, sort: [sort]) { groups in
                 List {
-                    ForEach(groups.sorted(by: { a, b in a.key == .good })) { group in
+                    ForEach(groups.sorted(by: { a, b in a.key.sorted > b.key.sorted })) { group in
                         let text = Text("\(group.key.rawValue) habits").font(.caption).textCase(.none).foregroundColor(.gray)
                         Section(header: text) {
                             ForEach(group.items) { item in
                                 Text(item.name)
+                            }.onDelete {
+                                self.deleteItems(offsets: $0, group: group.items)
                             }
                         }
                     }
@@ -52,8 +55,10 @@ struct HabitListView: View {
                 .searchable(text: $searchText)
                 .toolbar {
                     ToolbarItem {
-                        Button(action: {}) {
-                            Label("Add Item", systemImage: "plus")
+                        NavigationLink(destination: HabitEditView(nil, saveItem, deleteItem)) {
+                            Button(action: {}) {
+                                Label("Add Item", systemImage: "plus")
+                            }
                         }
                     }
                 }
@@ -62,6 +67,26 @@ struct HabitListView: View {
             withAnimation {
                 setup()
             }
+        }
+    }
+    
+    private func deleteItems(offsets: IndexSet, group: [Habit]) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(group[index])
+            }
+        }
+    }
+    
+    private func saveItem(item: Habit) {
+        withAnimation {
+            modelContext.insert(item)
+        }
+    }
+    
+    private func deleteItem(item: Habit) {
+        withAnimation {
+            modelContext.delete(item)
         }
     }
 }

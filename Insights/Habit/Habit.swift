@@ -23,10 +23,22 @@ final class Habit: Identifiable {
         self.describe = describe
         self.labels = labels
     }
+    
+    static func initial() -> Habit {
+        Habit(name: "", rating: .good)
+    }
 }
 
 enum HabitRating: String, Codable {
     case good = "Good"
     case neutral = "Neutral"
     case bad = "Bad"
+    
+    var sorted: Int {
+        switch self {
+        case .good: return 1
+        case .bad: return -1
+        case .neutral: return 2
+        }
+    }
 }

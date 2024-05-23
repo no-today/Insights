@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A968BF532BFB88210084C952 /* JournalEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968BF522BFB88210084C952 /* JournalEditView.swift */; };
+		A968BF552BFF80DA0084C952 /* HabitEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968BF542BFF80DA0084C952 /* HabitEditView.swift */; };
 		B14C23CC2BFB31900031E0AD /* InsightsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14C23CB2BFB31900031E0AD /* InsightsApp.swift */; };
 		B14C23CE2BFB31900031E0AD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14C23CD2BFB31900031E0AD /* ContentView.swift */; };
 		B14C23D02BFB31900031E0AD /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14C23CF2BFB31900031E0AD /* Item.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		A968BF522BFB88210084C952 /* JournalEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalEditView.swift; sourceTree = "<group>"; };
+		A968BF542BFF80DA0084C952 /* HabitEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitEditView.swift; sourceTree = "<group>"; };
 		B14C23C82BFB31900031E0AD /* Insights.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Insights.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B14C23CB2BFB31900031E0AD /* InsightsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsApp.swift; sourceTree = "<group>"; };
 		B14C23CD2BFB31900031E0AD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -88,8 +90,8 @@
 		B14C23DD2BFB32320031E0AD /* Journal */ = {
 			isa = PBXGroup;
 			children = (
-				B14C23DB2BFB31FA0031E0AD /* JournalListView.swift */,
 				B14C23DE2BFB32510031E0AD /* Journal.swift */,
+				B14C23DB2BFB31FA0031E0AD /* JournalListView.swift */,
 				A968BF522BFB88210084C952 /* JournalEditView.swift */,
 			);
 			path = Journal;
@@ -108,6 +110,7 @@
 			children = (
 				B1CC05C12BFECFA500DF3AD7 /* Habit.swift */,
 				B1CC05C32BFED03100DF3AD7 /* HabitListView.swift */,
+				A968BF542BFF80DA0084C952 /* HabitEditView.swift */,
 			);
 			path = Habit;
 			sourceTree = "<group>";
@@ -185,6 +188,7 @@
 				B14C23CE2BFB31900031E0AD /* ContentView.swift in Sources */,
 				B1CC05C42BFED03100DF3AD7 /* HabitListView.swift in Sources */,
 				B14C23DF2BFB32510031E0AD /* Journal.swift in Sources */,
+				A968BF552BFF80DA0084C952 /* HabitEditView.swift in Sources */,
 				B14C23D02BFB31900031E0AD /* Item.swift in Sources */,
 				B14C23DC2BFB31FA0031E0AD /* JournalListView.swift in Sources */,
 				A968BF532BFB88210084C952 /* JournalEditView.swift in Sources */,
@@ -332,7 +336,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -362,7 +366,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
