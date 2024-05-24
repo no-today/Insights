@@ -17,7 +17,7 @@ struct JournalListView: View {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        JournalEditView(item, saveItem, deleteItem)
+                        JournalEditView(item)
                     } label: {
                         Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
                     }
@@ -25,25 +25,13 @@ struct JournalListView: View {
             }
             .toolbar {
                 ToolbarItem {
-                    NavigationLink(destination: JournalEditView(nil, saveItem, deleteItem)) {
+                    NavigationLink(destination: JournalEditView()) {
                         Button(action: {}) {
                             Label("Add Item", systemImage: "plus")
                         }
                     }
                 }
             }
-        }
-    }
-    
-    private func saveItem(item: Journal) {
-        withAnimation {
-            modelContext.insert(item)
-        }
-    }
-    
-    private func deleteItem(item: Journal) {
-        withAnimation {
-            modelContext.delete(item)
         }
     }
 }

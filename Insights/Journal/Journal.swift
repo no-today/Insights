@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Journal {
-    var timestamp: Date = Date.now
+    private(set) var timestamp: Date = Date.now
     var date: Date
     var title: String
     var content: String
@@ -19,10 +19,5 @@ final class Journal {
         self.date = date
         self.title = title
         self.content = content
-    }
-    
-    static func initial() -> Journal {
-        let date = Date()
-        return Journal(date: date, title: date.formatted(date: .complete, time: .omitted), content: "")
     }
 }

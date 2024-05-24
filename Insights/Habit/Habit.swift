@@ -10,35 +10,32 @@ import SwiftData
 
 @Model
 final class Habit: Identifiable {
+    var timestamp = Date.now
+    
+    @Attribute(.unique)
     var name: String
     var rating: HabitRating
-    var sort: Int?
-    var describe: String?
-    var labels: [String]?
+    var priority: Int
     
-    init(name: String, rating: HabitRating, sort: Int? = nil, describe: String? = nil, labels: [String]? = nil) {
+    init(name: String, rating: HabitRating, priority: Int = 0) {
         self.name = name
         self.rating = rating
-        self.sort = sort
-        self.describe = describe
-        self.labels = labels
-    }
-    
-    static func initial() -> Habit {
-        Habit(name: "", rating: .good)
+        self.priority = priority
     }
 }
 
-enum HabitRating: String, Codable {
+enum HabitRating: String, Codable, CaseIterable, Identifiable {
     case good = "Good"
     case neutral = "Neutral"
     case bad = "Bad"
+    
+    var id: String { self.rawValue }
     
     var sorted: Int {
         switch self {
         case .good: return 1
         case .bad: return -1
-        case .neutral: return 2
+        case .neutral: return 0
         }
     }
 }

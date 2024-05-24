@@ -13,7 +13,8 @@ struct InsightsApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
-            Journal.self
+            Journal.self,
+            Habit.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -26,7 +27,7 @@ struct InsightsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HabitListView()
         }
         .modelContainer(sharedModelContainer)
     }
