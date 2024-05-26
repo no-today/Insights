@@ -12,7 +12,6 @@ import SwiftData
 struct InsightsApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
             Journal.self,
             Habit.self
         ])
@@ -27,7 +26,7 @@ struct InsightsApp: App {
 
     var body: some Scene {
         WindowGroup {
-            HabitListView()
+            JournalEditView()
         }
         .modelContainer(sharedModelContainer)
     }

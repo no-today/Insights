@@ -29,7 +29,7 @@ struct HabitListView: View {
         NavigationStack {
             SectionedQueryView(for: Habit.self, groupBy: \.rating, filter: filter, sort: [sort]) { groups in
                 List {
-                    ForEach(groups.sorted(by: { a, b in a.key.sorted > b.key.sorted })) { group in
+                    ForEach(groups.sorted()) { group in
                         let text = Text("\(group.key.rawValue) Habits").textCase(.none)
                         Section(header: text) {
                             ForEach(group.items) { item in
@@ -61,6 +61,11 @@ struct HabitListView: View {
         }
         .sheet(isPresented: $showingEditSheet) {
             HabitEditView()
+        }
+        .onAppear {
+            for item in initedHabits {
+                modelContext.insert(item)
+            }
         }
     }
     

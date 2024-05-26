@@ -11,8 +11,15 @@ struct JournalEditView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    @ObservedObject private var keyboardResponder = KeyboardResponder()
+    
     @State private var showingDateSheet = false
-    @State private var selectedButton: ButtonType? = nil
+    @State private var selectedButton: ButtonType? = nil {
+        didSet {
+            showingFetureSheet = selectedButton != nil
+        }
+    }
+    @State private var showingFetureSheet = false
     
     private let journal: Journal?
     
@@ -60,14 +67,41 @@ struct JournalEditView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                GeometryReader { geometry in
-                    TextEditor(text: $content)
-                        .frame(height: geometry.size.height)
-                        .onTapGesture {
-                            selectedButton = nil
+                TextEditor(text: $content)
+                    .focusable(true)
+                    .onTapGesture {
+                        selectedButton = nil
+                    }
+                
+                VStack {
+                    HStack {
+                        ForEach(ButtonType.allCases, id: \.rawValue) { bt in
+                            Spacer()
+                            Button(action: {
+                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                
+                                selectedButton = bt
+                            }, label: {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 11, style: .continuous)
+                                        .foregroundColor(.gray.opacity(0.3))
+                                        .frame(width: 35, height: 35) // Adjust size to fit the icon
+                                        .foregroundStyle(.tint)
+                                        .shadow(radius: 3)
+                                        .opacity(selectedButton == bt ? 1 : 0)
+                                    
+                                    Image(systemName: bt.rawValue)
+                                        .foregroundStyle(.blue)
+                                        .frame(width: 40, height: 40) // Ensure icon is centered in the background
+                                }
+                            })
                         }
+                        Spacer()
+                    }
+                    Spacer()
                 }
-                .padding()
+                .frame(height: 50 + 200)
+                .background(Color(hex: "F5F5F5"))
             }
             .navigationBarBackButtonHidden()
             .navigationTitle(date.formatted(date: .numeric, time: .omitted))
@@ -114,33 +148,21 @@ struct JournalEditView: View {
                     }
                     .disabled(validateFields)
                 }
-                
-                ToolbarItemGroup(placement: .bottomBar) {
-                    ForEach(ButtonType.allCases, id: \.rawValue) { bt in
-                        Spacer()
-                        Button(action: {
-                            selectedButton = bt
-                        }, label: {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 11, style: .continuous)
-                                    .foregroundColor(.gray.opacity(0.3))
-                                    .foregroundStyle(.tint)
-                                    .shadow(radius: 3)
-                                    .opacity(selectedButton == bt ? 1 : 0)
-                                
-                                Image(systemName: bt.rawValue)
-                                    .foregroundStyle(.blue)
-                            }
-                        })
-                    }
-                    Spacer()
-                }
             }
             .presentationDetents([.large])
             .presentationBackgroundInteraction(.automatic)
             .presentationBackground(.regularMaterial)
             .sheet(isPresented: $showingDateSheet) {
                 DatePickerView(date: $date, showingDateSheet: $showingDateSheet)
+            }
+            .sheet(isPresented: $showingFetureSheet) {
+                VStack {
+                    HabitTagSelector()
+                        .padding()
+                }
+                .presentationDetents([.height(200), .large])
+                .presentationBackgroundInteraction(.automatic)
+                .presentationBackground(.regularMaterial)
             }
             .onAppear {
                 copyof()
@@ -174,7 +196,13 @@ struct DatePickerView: View {
     }
 }
 
+struct HabitSelectorView: View {
+    var body: some View {
+        Text("Habits")
+    }
+}
+
 #Preview {
     JournalEditView()
-        .modelContainer(for: Journal.self, inMemory: true)
+        .modelContainer(for: [Journal.self, Habit.self], inMemory: true)
 }

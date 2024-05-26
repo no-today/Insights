@@ -26,7 +26,7 @@ struct QueryView<Model: PersistentModel, Content: View>: View {
     }
 }
 
-struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable>: View {
+struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable & Comparable>: View {
     @Query private var query: [Model]
     
     private var groupBy: (Model) -> Key
@@ -57,8 +57,12 @@ struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable>:
     }
 }
 
-struct QueryDataSection<Key: Hashable, Model: PersistentModel>: Identifiable {
+struct QueryDataSection<Key: Hashable & Comparable, Model: PersistentModel>: Identifiable, Comparable {
     var id = UUID()
     var key: Key
     var items: [Model]
+    
+    static func < (lhs: QueryDataSection<Key, Model>, rhs: QueryDataSection<Key, Model>) -> Bool {
+        lhs.key < rhs.key
+    }
 }
